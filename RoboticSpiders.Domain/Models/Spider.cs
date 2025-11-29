@@ -1,5 +1,7 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using RoboticSpiders.Domain.Exceptions;
 
 namespace RoboticSpiders.Domain.Models;
 
@@ -10,7 +12,7 @@ public class Spider(
 {
     private readonly Lock _lock = new();
     public Position Position { get; private set; } = startPosition;
-    private readonly IWall _wall = !wall.IsValidPosition(startPosition.X, startPosition.Y) ? throw new ArgumentException("Spider cannot start outside the wall.") : wall;
+    private readonly IWall _wall = !wall.IsValidPosition(startPosition.X, startPosition.Y) ? throw new WallCollisionException("Spider cannot start outside the wall.") : wall;
 
     public void MoveForward()
     {

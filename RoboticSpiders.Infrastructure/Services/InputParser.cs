@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using RoboticSpiders.Domain.Models;
 using RoboticSpiders.Application.Services;
 using RoboticSpiders.Application.Commands;
+using RoboticSpiders.Domain.Exceptions;
 
 namespace RoboticSpiders.Infrastructure.Services;
 
@@ -28,7 +29,7 @@ public class InputParser : IInputParser
             }
             else
             {
-                throw new ArgumentException($"Unknown command: {c}");
+                throw new InvalidCommandException($"Unknown command: {c}");
             }
         }
     }

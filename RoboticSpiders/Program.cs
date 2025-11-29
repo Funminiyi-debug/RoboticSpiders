@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RoboticSpiders.Domain.Models;
 using RoboticSpiders.Application.Services;
 using RoboticSpiders.Infrastructure.Services;
+using RoboticSpiders.Domain.Exceptions;
 
 namespace RoboticSpiders;
 
@@ -26,7 +27,7 @@ class Program
             var inputProvider = serviceProvider.GetRequiredService<IInputProvider>();
             var parser = serviceProvider.GetRequiredService<IInputParser>();
             var missionControl = serviceProvider.GetRequiredService<MissionControl>();
-            
+
             const string wallInputMessage = "Enter Wall Size (e.g., '7 15'):";
             const string positionInputMessage = "Enter Spider Position (e.g., '4 10 Left'):";
             const string instructionsInputMessage = "Enter Instructions (e.g., 'FLFLFRFFLF'):";
@@ -41,6 +42,16 @@ class Program
             missionControl.ExecuteMissionAsync(spider, commands);
 
             logger.WriteInfo($"Final Position: {spider.Position}");
+        }
+        catch (InvalidCommandException ex)
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger>();
+            logger.WriteError($"Command Error: {ex.Message}");
+        }
+        catch (WallCollisionException ex)
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger>();
+            logger.WriteError($"Collision Error: {ex.Message}");
         }
         catch (Exception ex)
         {

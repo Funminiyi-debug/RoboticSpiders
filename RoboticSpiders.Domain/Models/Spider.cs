@@ -8,18 +8,35 @@ public class Spider(
         IWall wall
     ) : IMovable
 {
+    private readonly Lock _lock = new();
     public Position Position { get; private set; } = startPosition;
     private readonly IWall _wall = !wall.IsValidPosition(startPosition.X, startPosition.Y) ? throw new ArgumentException("Spider cannot start outside the wall.") : wall;
 
     public void MoveForward()
     {
-        var nextPos = Position.MoveForward();
-        if (_wall.IsValidPosition(nextPos.X, nextPos.Y))
+        lock (_lock)
         {
-            Position = nextPos;
+            var nextPos = Position.MoveForward();
+            if (_wall.IsValidPosition(nextPos.X, nextPos.Y))
+            {
+                Position = nextPos;
+            }
         }
     }
 
-    public void TurnLeft() => Position = Position.TurnLeft();
-    public void TurnRight() => Position = Position.TurnRight();
-};
+    public void TurnLeft()
+    {
+        lock (_lock)
+        {
+            Position = Position.TurnLeft();
+        }
+    }
+
+    public void TurnRight()
+    {
+        lock (_lock)
+        {
+            Position = Position.TurnRight();
+        }
+    }
+}

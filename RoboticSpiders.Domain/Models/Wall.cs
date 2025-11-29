@@ -5,8 +5,8 @@ public class Wall(
         int maxY
     ) : IWall
 {
-    public int MaxX { get; } = maxX;
-    public int MaxY { get; } = maxY;
+    public int MaxX { get; } = maxX < 0 ? throw  new ArgumentOutOfRangeException(nameof(maxX), maxX, "Wall cannot have negative values"): maxX;
+    public int MaxY { get; } = maxY < 0 ? throw  new ArgumentOutOfRangeException(nameof(maxY), maxY, "Wall cannot have negative values"): maxY;
 
     public bool IsValidPosition(int x, int y)
     {

@@ -14,7 +14,7 @@ public class SpiderTests
     {
         // Arrange
         IWall wall = new Wall(7, 15);
-        IPosition startPos = new Position(4, 10, Orientation.Left);
+        Position startPos = new Position(4, 10, Orientation.Left);
         IMovable spider = new Spider(startPos, wall);
         var missionControl = new MissionControl();
         IInputParser parser = new InputParser();
@@ -33,7 +33,7 @@ public class SpiderTests
     public void MoveForward_BoundaryCheck_DoesNotMoveOffWall()
     {
         IWall wall = new Wall(5, 5);
-        IPosition startPos = new Position(0, 0, Orientation.Down); // Facing edge
+        Position startPos = new Position(0, 0, Orientation.Down); // Facing edge
         IMovable spider = new Spider(startPos, wall);
 
         spider.MoveForward();

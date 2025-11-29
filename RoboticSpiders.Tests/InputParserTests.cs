@@ -36,7 +36,7 @@ public class InputParserTests
     [Fact]
     public void ParseInstructions_ValidInput_ReturnsCommands()
     {
-        var commands = _parser.ParseInstructions("FLR");
+        var commands = _parser.ParseInstructions("FLR").ToList();
         Assert.Equal(3, commands.Count);
         Assert.IsType<MoveForwardCommand>(commands[0]);
         Assert.IsType<TurnLeftCommand>(commands[1]);

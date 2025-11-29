@@ -10,7 +10,7 @@ namespace RoboticSpiders.Tests;
 public class SpiderTests
 {
     [Fact]
-    public async Task ExecuteMission_ExampleCase_ReturnsCorrectPosition()
+    public void ExecuteMission_ExampleCase_ReturnsCorrectPosition()
     {
         // Arrange
         IWall wall = new Wall(7, 15);
@@ -21,7 +21,7 @@ public class SpiderTests
         var commands = parser.ParseInstructions("FLFLFRFFLF");
 
         // Act
-        await missionControl.ExecuteMissionAsync(spider, commands);
+        missionControl.ExecuteMissionAsync(spider, commands);
 
         // Assert
         Assert.Equal(5, spider.Position.X);

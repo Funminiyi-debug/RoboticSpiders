@@ -9,7 +9,7 @@ namespace RoboticSpiders;
 
 class Program
 {
-    static async Task Main(string[] args)
+    private static void Main(string[] args)
     {
         // Setup Dependency Injection
         var serviceProvider = new ServiceCollection()
@@ -25,6 +25,7 @@ class Program
             var parser = serviceProvider.GetRequiredService<IInputParser>();
             var missionControl = serviceProvider.GetRequiredService<MissionControl>();
 
+            
             string wallInput = inputProvider.ReadValidLine();
 
             string positionInput = inputProvider.ReadValidLine();
@@ -37,7 +38,7 @@ class Program
 
             IMovable spider = new Spider(position, wall);
 
-            await missionControl.ExecuteMissionAsync(spider, commands);
+            missionControl.ExecuteMissionAsync(spider, commands);
 
             Console.WriteLine(spider.Position);
         }

@@ -1,11 +1,9 @@
-using Xunit;
 using Moq;
 using RoboticSpiders.Application.Commands;
 using RoboticSpiders.Application.Services;
 using RoboticSpiders.Domain.Exceptions;
 using RoboticSpiders.Domain.Models;
 using RoboticSpiders.Infrastructure.Services;
-using System.Linq;
 
 namespace RoboticSpiders.Tests;
 

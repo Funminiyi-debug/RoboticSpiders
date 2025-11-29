@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using RoboticSpiders.Domain.Models;
 using RoboticSpiders.Application.Services;
 using RoboticSpiders.Infrastructure.Services;
@@ -21,10 +19,11 @@ class Program
             .AddSingleton<MissionControl>()
             .BuildServiceProvider();
 
+        var logger = serviceProvider.GetRequiredService<ILogger>();
+
         try
         {
             // Resolve Services
-            var logger = serviceProvider.GetRequiredService<ILogger>();
             var inputProvider = serviceProvider.GetRequiredService<IInputProvider>();
             var parser = serviceProvider.GetRequiredService<IInputParser>();
             var missionControl = serviceProvider.GetRequiredService<MissionControl>();
@@ -46,17 +45,14 @@ class Program
         }
         catch (InvalidCommandException ex)
         {
-            var logger = serviceProvider.GetRequiredService<ILogger>();
             logger.WriteError($"Command Error: {ex.Message}");
         }
         catch (WallCollisionException ex)
         {
-            var logger = serviceProvider.GetRequiredService<ILogger>();
             logger.WriteError($"Collision Error: {ex.Message}");
         }
         catch (Exception ex)
         {
-            var logger = serviceProvider.GetRequiredService<ILogger>();
             logger.WriteError($"Critical Error: {ex.Message}");
         }
     }

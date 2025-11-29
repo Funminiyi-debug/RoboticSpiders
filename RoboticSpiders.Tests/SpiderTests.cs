@@ -1,10 +1,6 @@
-using Xunit;
 using RoboticSpiders.Domain.Models;
-using RoboticSpiders.Application.Commands;
 using RoboticSpiders.Application.Services;
 using RoboticSpiders.Infrastructure.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace RoboticSpiders.Tests;
 

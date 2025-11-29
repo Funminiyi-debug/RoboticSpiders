@@ -1,4 +1,3 @@
-using System;
 using RoboticSpiders.Application.Services;
 
 namespace RoboticSpiders.Infrastructure.Services;

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 using RoboticSpiders.Domain.Models;
 using RoboticSpiders.Application.Commands;
 

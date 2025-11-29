@@ -25,26 +25,21 @@ class Program
             var parser = serviceProvider.GetRequiredService<IInputParser>();
             var missionControl = serviceProvider.GetRequiredService<MissionControl>();
 
-            
-            string wallInput = inputProvider.ReadValidLine();
 
-            string positionInput = inputProvider.ReadValidLine();
-
-            string instructionsInput = inputProvider.ReadValidLine();
-
-            IWall wall = parser.ParseWall(wallInput);
-            Position position = parser.ParsePosition(positionInput);
-            var commands = parser.ParseInstructions(instructionsInput);
+            IWall wall = inputProvider.GetInput("Enter Wall Size (e.g., '7 15'):", parser.ParseWall);
+            Position position = inputProvider.GetInput("Enter Spider Position (e.g., '4 10 Left'):", parser.ParsePosition);
+            var commands = inputProvider.GetInput("Enter Instructions (e.g., 'FLFLFRFFLF'):", parser.ParseInstructions);
 
             IMovable spider = new Spider(position, wall);
 
             missionControl.ExecuteMissionAsync(spider, commands);
 
-            Console.WriteLine(spider.Position);
+            inputProvider.WriteInfo($"Final Position: {spider.Position}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            var inputProvider = serviceProvider.GetRequiredService<IInputProvider>();
+            inputProvider.WriteError($"Critical Error: {ex.Message}");
         }
     }
 }

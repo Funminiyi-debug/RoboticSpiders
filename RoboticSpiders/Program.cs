@@ -1,4 +1,7 @@
-﻿using RoboticSpiders.Domain.Models;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using RoboticSpiders.Domain.Models;
 using RoboticSpiders.Application.Services;
 using RoboticSpiders.Infrastructure.Services;
 
@@ -8,18 +11,25 @@ class Program
 {
     static async Task Main(string[] args)
     {
+        // Setup Dependency Injection
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton<IInputProvider, ConsoleInputProvider>()
+            .AddSingleton<IInputParser, InputParser>()
+            .AddSingleton<MissionControl>()
+            .BuildServiceProvider();
+
         try
         {
-            IInputProvider inputProvider = new ConsoleInputProvider();
+            // Resolve Services
+            var inputProvider = serviceProvider.GetRequiredService<IInputProvider>();
+            var parser = serviceProvider.GetRequiredService<IInputParser>();
+            var missionControl = serviceProvider.GetRequiredService<MissionControl>();
 
             string wallInput = inputProvider.ReadValidLine();
 
             string positionInput = inputProvider.ReadValidLine();
 
             string instructionsInput = inputProvider.ReadValidLine();
-
-            IInputParser parser = new InputParser();
-            var missionControl = new MissionControl();
 
             IWall wall = parser.ParseWall(wallInput);
             Position position = parser.ParsePosition(positionInput);

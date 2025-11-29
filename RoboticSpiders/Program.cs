@@ -26,11 +26,15 @@ class Program
             var inputProvider = serviceProvider.GetRequiredService<IInputProvider>();
             var parser = serviceProvider.GetRequiredService<IInputParser>();
             var missionControl = serviceProvider.GetRequiredService<MissionControl>();
+            
+            const string wallInputMessage = "Enter Wall Size (e.g., '7 15'):";
+            const string positionInputMessage = "Enter Spider Position (e.g., '4 10 Left'):";
+            const string instructionsInputMessage = "Enter Instructions (e.g., 'FLFLFRFFLF'):";
 
 
-            IWall wall = inputProvider.GetInput("Enter Wall Size (e.g., '7 15'):", parser.ParseWall);
-            Position position = inputProvider.GetInput("Enter Spider Position (e.g., '4 10 Left'):", parser.ParsePosition);
-            var commands = inputProvider.GetInput("Enter Instructions (e.g., 'FLFLFRFFLF'):", parser.ParseInstructions);
+            IWall wall = inputProvider.GetInput(wallInputMessage, parser.ParseWall);
+            Position position = inputProvider.GetInput(positionInputMessage, parser.ParsePosition);
+            var commands = inputProvider.GetInput(instructionsInputMessage, parser.ParseInstructions);
 
             IMovable spider = new Spider(position, wall);
 

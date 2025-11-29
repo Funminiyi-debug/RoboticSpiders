@@ -8,6 +8,6 @@ namespace RoboticSpiders.Application.Services;
 public interface IInputParser
 {
     IWall ParseWall(string input);
-    IPosition ParsePosition(string input);
-    List<ICommand> ParseInstructions(string input);
+    Position ParsePosition(string input);
+    IEnumerable<ICommand> ParseInstructions(string input);
 }

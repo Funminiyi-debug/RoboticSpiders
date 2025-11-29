@@ -12,30 +12,23 @@ class Program
         {
             IInputProvider inputProvider = new ConsoleInputProvider();
 
-            // Read Wall Size
             string wallInput = inputProvider.ReadValidLine();
 
-            // Read Spider Position
             string positionInput = inputProvider.ReadValidLine();
 
-            // Read Instructions
             string instructionsInput = inputProvider.ReadValidLine();
 
             IInputParser parser = new InputParser();
             var missionControl = new MissionControl();
 
-            // Parse Inputs
             IWall wall = parser.ParseWall(wallInput);
-            IPosition position = parser.ParsePosition(positionInput);
+            Position position = parser.ParsePosition(positionInput);
             var commands = parser.ParseInstructions(instructionsInput);
 
-            // Create Spider
             IMovable spider = new Spider(position, wall);
 
-            // Execute Mission
             await missionControl.ExecuteMissionAsync(spider, commands);
 
-            // Output Result
             Console.WriteLine(spider.Position);
         }
         catch (Exception ex)

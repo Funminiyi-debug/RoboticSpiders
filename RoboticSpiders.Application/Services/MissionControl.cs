@@ -7,7 +7,7 @@ namespace RoboticSpiders.Application.Services;
 
 public class MissionControl
 {
-    public async Task ExecuteMissionAsync(IMovable actor, List<ICommand> commands)
+    public async Task ExecuteMissionAsync(IMovable actor, IEnumerable<ICommand> commands)
     {
         await Task.Run(() =>
         {

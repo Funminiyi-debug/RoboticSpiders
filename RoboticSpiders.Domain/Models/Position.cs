@@ -1,17 +1,37 @@
 namespace RoboticSpiders.Domain.Models;
 
-public class Position(
-        int x,
-        int y,
-        Orientation orientation
-    ) : IPosition
+public readonly record struct Position(int X, int Y, Orientation Orientation)
 {
-    public int X { get; set; } = x;
-    public int Y { get; set; } = y;
-    public Orientation Orientation { get; set; } = orientation;
-
-    public override string ToString()
+    public Position MoveForward(int steps = 1) => Orientation switch
     {
-        return $"{X} {Y} {Orientation}";
-    }
+        Orientation.Up    => this with { Y = Y + steps },
+        Orientation.Right => this with { X = X + steps },
+        Orientation.Down  => this with { Y = Y - steps },
+        Orientation.Left  => this with { X = X - steps },
+        _ => this
+    };
+
+    public Position TurnLeft() => this with
+    {
+        Orientation = Orientation switch
+        {
+            Orientation.Up => Orientation.Left,
+            Orientation.Left => Orientation.Down,
+            Orientation.Down => Orientation.Right,
+            Orientation.Right => Orientation.Up,
+            _ => Orientation
+        }
+    };
+
+    public Position TurnRight() => this with
+    {
+        Orientation = Orientation switch
+        {
+            Orientation.Up => Orientation.Right,
+            Orientation.Right => Orientation.Down,
+            Orientation.Down => Orientation.Left,
+            Orientation.Left => Orientation.Up,
+            _ => Orientation
+        }
+    };
 }

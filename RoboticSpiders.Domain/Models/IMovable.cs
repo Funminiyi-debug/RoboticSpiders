@@ -4,7 +4,7 @@ namespace RoboticSpiders.Domain.Models;
 
 public interface IMovable
 {
-    IPosition Position { get; }
+    Position Position { get; }
     void TurnLeft();
     void TurnRight();
     void MoveForward();

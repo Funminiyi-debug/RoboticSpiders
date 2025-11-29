@@ -8,6 +8,30 @@ namespace RoboticSpiders.Infrastructure.Services;
 
 public class InputParser : IInputParser
 {
+    private readonly Dictionary<char, Func<ICommand>> _commandMap = new()
+    {
+        { 'L', () => new TurnLeftCommand() },
+        { 'R', () => new TurnRightCommand() },
+        { 'F', () => new MoveForwardCommand() }
+    };
+
+    public IEnumerable<ICommand> ParseInstructions(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) yield break;
+
+        foreach (char c in input)
+        {
+            var key = char.ToUpperInvariant(c);
+            if (_commandMap.TryGetValue(key, out var factory))
+            {
+                yield return factory();
+            }
+            else
+            {
+                throw new ArgumentException($"Unknown command: {c}");
+            }
+        }
+    }
     public IWall ParseWall(string input)
     {
         var parts = input.Split(' ');
@@ -20,7 +44,7 @@ public class InputParser : IInputParser
         return new Wall(x, y);
     }
 
-    public IPosition ParsePosition(string input)
+    public Position ParsePosition(string input)
     {
         var parts = input.Split(' ');
         if (parts.Length != 3)
@@ -33,28 +57,5 @@ public class InputParser : IInputParser
             throw new ArgumentException("Invalid orientation. Expected 'Left', 'Right', 'Up', or 'Down'.");
 
         return new Position(x, y, orientation);
-    }
-
-    public List<ICommand> ParseInstructions(string input)
-    {
-        var commands = new List<ICommand>();
-        foreach (char c in input)
-        {
-            switch (char.ToUpper(c))
-            {
-                case 'L':
-                    commands.Add(new TurnLeftCommand());
-                    break;
-                case 'R':
-                    commands.Add(new TurnRightCommand());
-                    break;
-                case 'F':
-                    commands.Add(new MoveForwardCommand());
-                    break;
-                default:
-                    throw new ArgumentException($"Invalid instruction '{c}'. Expected 'L', 'R', or 'F'.");
-            }
-        }
-        return commands;
     }
 }

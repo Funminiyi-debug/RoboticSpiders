@@ -1,15 +1,12 @@
 namespace RoboticSpiders.Domain.Models;
 
-public class Wall : IWall
+public class Wall(
+        int maxX,
+        int maxY
+    ) : IWall
 {
-    public int MaxX { get; }
-    public int MaxY { get; }
-
-    public Wall(int maxX, int maxY)
-    {
-        MaxX = maxX;
-        MaxY = maxY;
-    }
+    public int MaxX { get; } = maxX;
+    public int MaxY { get; } = maxY;
 
     public bool IsValidPosition(int x, int y)
     {

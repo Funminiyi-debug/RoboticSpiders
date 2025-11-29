@@ -5,16 +5,23 @@ namespace RoboticSpiders.Infrastructure.Services;
 
 public class ConsoleInputProvider : IInputProvider
 {
+    private readonly ILogger _logger;
+
+    public ConsoleInputProvider(ILogger logger)
+    {
+        _logger = logger;
+    }
+
     public T GetInput<T>(string prompt, Func<string, T> parser)
     {
         while (true)
         {
-            WriteInfo(prompt);
+            _logger.WriteInfo(prompt);
             string? input = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(input))
             {
-                WriteError("Input cannot be empty. Please try again.");
+                _logger.WriteError("Input cannot be empty. Please try again.");
                 continue;
             }
 
@@ -24,29 +31,8 @@ public class ConsoleInputProvider : IInputProvider
             }
             catch (Exception ex)
             {
-                WriteError($"Invalid input: {ex.Message}. Please try again.");
+                _logger.WriteError($"Invalid input: {ex.Message}. Please try again.");
             }
         }
-    }
-
-    public void WriteInfo(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine(message);
-        Console.ResetColor();
-    }
-
-    public void WriteError(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(message);
-        Console.ResetColor();
-    }
-
-    public void WriteWarning(string message)
-    {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(message);
-        Console.ResetColor();
     }
 }

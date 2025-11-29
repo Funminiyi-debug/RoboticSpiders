@@ -13,6 +13,7 @@ class Program
     {
         // Setup Dependency Injection
         var serviceProvider = new ServiceCollection()
+            .AddSingleton<ILogger, ConsoleLogger>()
             .AddSingleton<IInputProvider, ConsoleInputProvider>()
             .AddSingleton<IInputParser, InputParser>()
             .AddSingleton<MissionControl>()
@@ -21,6 +22,7 @@ class Program
         try
         {
             // Resolve Services
+            var logger = serviceProvider.GetRequiredService<ILogger>();
             var inputProvider = serviceProvider.GetRequiredService<IInputProvider>();
             var parser = serviceProvider.GetRequiredService<IInputParser>();
             var missionControl = serviceProvider.GetRequiredService<MissionControl>();
@@ -34,12 +36,12 @@ class Program
 
             missionControl.ExecuteMissionAsync(spider, commands);
 
-            inputProvider.WriteInfo($"Final Position: {spider.Position}");
+            logger.WriteInfo($"Final Position: {spider.Position}");
         }
         catch (Exception ex)
         {
-            var inputProvider = serviceProvider.GetRequiredService<IInputProvider>();
-            inputProvider.WriteError($"Critical Error: {ex.Message}");
+            var logger = serviceProvider.GetRequiredService<ILogger>();
+            logger.WriteError($"Critical Error: {ex.Message}");
         }
     }
 }

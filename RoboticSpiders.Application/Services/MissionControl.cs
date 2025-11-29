@@ -5,7 +5,7 @@ namespace RoboticSpiders.Application.Services;
 
 public class MissionControl
 {
-    public void ExecuteMissionAsync(IMovable actor, IEnumerable<ICommand> commands)
+    public void ExecuteMission(IMovable actor, IEnumerable<ICommand> commands)
     {
         foreach (var command in commands)
         {

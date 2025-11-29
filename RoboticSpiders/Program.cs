@@ -39,7 +39,7 @@ class Program
 
             IMovable spider = new Spider(position, wall);
 
-            missionControl.ExecuteMissionAsync(spider, commands);
+            missionControl.ExecuteMission(spider, commands);
 
             logger.WriteInfo($"Final Position: {spider.Position}");
         }

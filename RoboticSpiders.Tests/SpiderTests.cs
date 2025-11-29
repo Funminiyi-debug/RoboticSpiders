@@ -19,7 +19,7 @@ public class SpiderTests
         var commands = parser.ParseInstructions("FLFLFRFFLF");
 
         // Act
-        missionControl.ExecuteMissionAsync(spider, commands);
+        missionControl.ExecuteMission(spider, commands);
 
         // Assert
         Assert.Equal(5, spider.Position.X);

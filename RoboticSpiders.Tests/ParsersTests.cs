@@ -7,49 +7,46 @@ using RoboticSpiders.Infrastructure.Services;
 
 namespace RoboticSpiders.Tests;
 
-public class InputParserTests
+public class ParsersTests
 {
-    private readonly IInputParser _parser;
-    private readonly Mock<ICommandFactory> _mockCommandFactory;
-
-    public InputParserTests()
-    {
-        _mockCommandFactory = new Mock<ICommandFactory>();
-        _parser = new InputParser(_mockCommandFactory.Object);
-    }
+    private readonly Mock<ICommandFactory> _mockCommandFactory = new();
 
     [Fact]
-    public void ParseWall_ValidInput_ReturnsWall()
+    public void WallParser_Parse_ValidInput_ReturnsWall()
     {
-        var wall = _parser.ParseWall("7 15");
+        var parser = new WallParser();
+        var wall = parser.Parse("7 15");
         Assert.Equal(7, wall.MaxX);
         Assert.Equal(15, wall.MaxY);
     }
 
     [Fact]
-    public void ParseInstructions_InvalidInput_ThrowsException()
+    public void InstructionParser_Parse_InvalidInput_ThrowsException()
     {
         _mockCommandFactory.Setup(x => x.GetCommand('X')).Throws(new InvalidCommandException("Unknown command: X"));
-        Assert.Throws<InvalidCommandException>(() => _parser.ParseInstructions("X").ToList());
+        var parser = new InstructionParser(_mockCommandFactory.Object);
+        Assert.Throws<InvalidCommandException>(() => parser.Parse("X").ToList());
     }
 
     [Fact]
-    public void ParsePosition_ValidInput_ReturnsPosition()
+    public void PositionParser_Parse_ValidInput_ReturnsPosition()
     {
-        var pos = _parser.ParsePosition("4 10 Left");
+        var parser = new PositionParser();
+        var pos = parser.Parse("4 10 Left");
         Assert.Equal(4, pos.X);
         Assert.Equal(10, pos.Y);
         Assert.Equal(Orientation.Left, pos.Orientation);
     }
 
     [Fact]
-    public void ParseInstructions_ValidInput_ReturnsCommands()
+    public void InstructionParser_Parse_ValidInput_ReturnsCommands()
     {
         _mockCommandFactory.Setup(x => x.GetCommand('F')).Returns(new MoveForwardCommand());
         _mockCommandFactory.Setup(x => x.GetCommand('L')).Returns(new TurnLeftCommand());
         _mockCommandFactory.Setup(x => x.GetCommand('R')).Returns(new TurnRightCommand());
 
-        var commands = _parser.ParseInstructions("FLR").ToList();
+        var parser = new InstructionParser(_mockCommandFactory.Object);
+        var commands = parser.Parse("FLR").ToList();
         Assert.Equal(3, commands.Count);
         Assert.IsType<MoveForwardCommand>(commands[0]);
         Assert.IsType<TurnLeftCommand>(commands[1]);

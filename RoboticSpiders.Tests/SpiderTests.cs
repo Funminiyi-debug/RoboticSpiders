@@ -15,8 +15,8 @@ public class SpiderTests
         IMovable spider = new Spider(startPos, wall);
         var missionControl = new MissionControl();
         ICommandFactory commandFactory = new CommandFactory();
-        IInputParser parser = new InputParser(commandFactory);
-        var commands = parser.ParseInstructions("FLFLFRFFLF");
+        IInstructionParser parser = new InstructionParser(commandFactory);
+        var commands = parser.Parse("FLFLFRFFLF");
 
         // Act
         missionControl.ExecuteMission(spider, commands);

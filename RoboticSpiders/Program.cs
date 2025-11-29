@@ -10,12 +10,13 @@ class Program
 {
     private static void Main(string[] args)
     {
-        // Setup Dependency Injection
         var serviceProvider = new ServiceCollection()
             .AddSingleton<ILogger, ConsoleLogger>()
             .AddSingleton<ICommandFactory, CommandFactory>()
             .AddSingleton<IInputProvider, ConsoleInputProvider>()
-            .AddSingleton<IInputParser, InputParser>()
+            .AddSingleton<IWallParser, WallParser>()
+            .AddSingleton<IPositionParser, PositionParser>()
+            .AddSingleton<IInstructionParser, InstructionParser>()
             .AddSingleton<MissionControl>()
             .BuildServiceProvider();
 
@@ -23,9 +24,10 @@ class Program
 
         try
         {
-            // Resolve Services
             var inputProvider = serviceProvider.GetRequiredService<IInputProvider>();
-            var parser = serviceProvider.GetRequiredService<IInputParser>();
+            var wallParser = serviceProvider.GetRequiredService<IWallParser>();
+            var positionParser = serviceProvider.GetRequiredService<IPositionParser>();
+            var instructionParser = serviceProvider.GetRequiredService<IInstructionParser>();
             var missionControl = serviceProvider.GetRequiredService<MissionControl>();
 
             const string wallInputMessage = "Enter Wall Size (e.g., '7 15'):";
@@ -33,9 +35,9 @@ class Program
             const string instructionsInputMessage = "Enter Instructions (e.g., 'FLFLFRFFLF'):";
 
 
-            IWall wall = inputProvider.GetInput(wallInputMessage, parser.ParseWall);
-            Position position = inputProvider.GetInput(positionInputMessage, parser.ParsePosition);
-            var commands = inputProvider.GetInput(instructionsInputMessage, parser.ParseInstructions);
+            var wall = inputProvider.GetInput(wallInputMessage, wallParser.Parse);
+            var position = inputProvider.GetInput(positionInputMessage, positionParser.Parse);
+            var commands = inputProvider.GetInput(instructionsInputMessage, instructionParser.Parse);
 
             IMovable spider = new Spider(position, wall);
 

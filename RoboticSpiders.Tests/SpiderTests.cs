@@ -1,5 +1,6 @@
 using Xunit;
 using RoboticSpiders.Domain.Models;
+using RoboticSpiders.Application.Commands;
 using RoboticSpiders.Application.Services;
 using RoboticSpiders.Infrastructure.Services;
 using System.Collections.Generic;
@@ -17,7 +18,8 @@ public class SpiderTests
         Position startPos = new Position(4, 10, Orientation.Left);
         IMovable spider = new Spider(startPos, wall);
         var missionControl = new MissionControl();
-        IInputParser parser = new InputParser();
+        ICommandFactory commandFactory = new CommandFactory();
+        IInputParser parser = new InputParser(commandFactory);
         var commands = parser.ParseInstructions("FLFLFRFFLF");
 
         // Act

@@ -7,30 +7,17 @@ using RoboticSpiders.Domain.Exceptions;
 
 namespace RoboticSpiders.Infrastructure.Services;
 
-public class InputParser : IInputParser
+public class InputParser(
+        ICommandFactory commandFactory
+    ) : IInputParser
 {
-    private readonly Dictionary<char, Func<ICommand>> _commandMap = new()
-    {
-        { 'L', () => new TurnLeftCommand() },
-        { 'R', () => new TurnRightCommand() },
-        { 'F', () => new MoveForwardCommand() }
-    };
-
     public IEnumerable<ICommand> ParseInstructions(string input)
     {
         if (string.IsNullOrWhiteSpace(input)) yield break;
 
         foreach (char c in input)
         {
-            var key = char.ToUpperInvariant(c);
-            if (_commandMap.TryGetValue(key, out var factory))
-            {
-                yield return factory();
-            }
-            else
-            {
-                throw new InvalidCommandException($"Unknown command: {c}");
-            }
+            yield return commandFactory.GetCommand(c);
         }
     }
     public IWall ParseWall(string input)

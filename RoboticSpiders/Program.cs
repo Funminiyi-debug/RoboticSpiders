@@ -15,6 +15,7 @@ class Program
         // Setup Dependency Injection
         var serviceProvider = new ServiceCollection()
             .AddSingleton<ILogger, ConsoleLogger>()
+            .AddSingleton<ICommandFactory, CommandFactory>()
             .AddSingleton<IInputProvider, ConsoleInputProvider>()
             .AddSingleton<IInputParser, InputParser>()
             .AddSingleton<MissionControl>()

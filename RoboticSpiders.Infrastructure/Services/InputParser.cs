@@ -19,7 +19,7 @@ public class InputParser(
     }
     public IWall ParseWall(string input)
     {
-        var parts = input.Split(' ');
+        var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length != 2)
             throw new ArgumentException("Invalid wall input. Expected 'x y'.");
 
@@ -31,7 +31,7 @@ public class InputParser(
 
     public Position ParsePosition(string input)
     {
-        var parts = input.Split(' ');
+        var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length != 3)
             throw new ArgumentException("Invalid position input. Expected 'x y Orientation'.");
 

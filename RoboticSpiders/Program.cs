@@ -39,7 +39,7 @@ class Program
             var position = inputProvider.GetInput(positionInputMessage, positionParser.Parse);
             var commands = inputProvider.GetInput(instructionsInputMessage, instructionParser.Parse);
 
-            IMovable spider = new Spider(position, wall);
+            var spider = new Spider(position, wall);
 
             missionControl.ExecuteMission(spider, commands);
 

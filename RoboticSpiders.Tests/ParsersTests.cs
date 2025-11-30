@@ -20,6 +20,37 @@ public class ParsersTests
         Assert.Equal(15, wall.MaxY);
     }
 
+    [Theory]
+    [InlineData("a 5")]
+    [InlineData("5 b")]
+    [InlineData("a b")]
+    public void WallParser_Parse_NonIntegerArgs_ThrowsArgumentException(string input)
+    {
+        var parser = new WallParser();
+        Assert.Throws<ArgumentException>(() => parser.Parse(input));
+    }
+
+    [Theory]
+    [InlineData("-5 5")]
+    [InlineData("5 -5")]
+    [InlineData("-1 -1")]
+    public void WallParser_Parse_NegativeNumbers_ThrowsException(string input)
+    {
+        var parser = new WallParser();
+        // Wall parser parses string to int, then Wall constructor throws ArgumentOutOfRangeException
+        Assert.Throws<ArgumentOutOfRangeException>(() => parser.Parse(input));
+    }
+
+    [Theory]
+    [InlineData("5")]
+    [InlineData("5 5 5")]
+    [InlineData("")]
+    public void WallParser_Parse_InvalidArgCount_ThrowsArgumentException(string input)
+    {
+        var parser = new WallParser();
+        Assert.Throws<ArgumentException>(() => parser.Parse(input));
+    }
+
     [Fact]
     public void InstructionParser_Parse_InvalidInput_ThrowsException()
     {

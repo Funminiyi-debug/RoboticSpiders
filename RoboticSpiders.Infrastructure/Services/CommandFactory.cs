@@ -6,11 +6,11 @@ namespace RoboticSpiders.Infrastructure.Services;
 
 public class CommandFactory : ICommandFactory
 {
-    private readonly Dictionary<char, Func<ICommand>> _commandMap = new()
+    private readonly Dictionary<char, ICommand> _commandMap = new()
     {
-        { 'L', () => new TurnLeftCommand() },
-        { 'R', () => new TurnRightCommand() },
-        { 'F', () => new MoveForwardCommand() }
+        { 'L',  new TurnLeftCommand() },
+        { 'R',  new TurnRightCommand() },
+        { 'F',  new MoveForwardCommand() }
     };
 
     public ICommand GetCommand(char commandChar)
@@ -18,7 +18,7 @@ public class CommandFactory : ICommandFactory
         var key = char.ToUpperInvariant(commandChar);
         if (_commandMap.TryGetValue(key, out var factory))
         {
-            return factory();
+            return factory;
         }
 
         throw new InvalidCommandException($"Unknown command: {commandChar}");

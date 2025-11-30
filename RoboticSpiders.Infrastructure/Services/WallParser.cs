@@ -7,7 +7,7 @@ public class WallParser : IWallParser
 {
     public IWall Parse(string input)
     {
-        var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries  | StringSplitOptions.TrimEntries);
         if (parts.Length != 2)
             throw new ArgumentException("Invalid wall input. Expected 'x y'.");
 

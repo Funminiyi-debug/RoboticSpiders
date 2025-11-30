@@ -7,7 +7,7 @@ public class PositionParser : IPositionParser
 {
     public Position Parse(string input)
     {
-        var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         if (parts.Length != 3)
             throw new ArgumentException("Invalid position input. Expected 'x y Orientation'.");
 

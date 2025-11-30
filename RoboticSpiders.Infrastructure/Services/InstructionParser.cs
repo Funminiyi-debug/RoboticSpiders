@@ -7,7 +7,7 @@ public class InstructionParser(ICommandFactory commandFactory) : IInstructionPar
 {
     public IEnumerable<ICommand> Parse(string input)
     {
-        if (string.IsNullOrWhiteSpace(input)) yield break;
+        if (string.IsNullOrWhiteSpace(input)) throw new ArgumentNullException(nameof(input), "Instruction input must not be null or empty");
 
         foreach (var c in input)
         {

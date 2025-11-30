@@ -8,14 +8,17 @@ public class ConsoleInputProvider(
 {
     public T GetInput<T>(string prompt, Func<string, T> parser)
     {
-        while (true)
+        const int totalAttempts = 3;
+        var attempts = 0;
+        while (attempts <= totalAttempts)
         {
             logger.WriteInfo(prompt);
-            string? input = Console.ReadLine();
+            var input = Console.ReadLine();
 
-            if (string.IsNullOrWhiteSpace(input))
+            if (input == null || string.IsNullOrWhiteSpace(input))
             {
                 logger.WriteError("Input cannot be empty. Please try again.");
+                attempts++;
                 continue;
             }
 
@@ -23,10 +26,14 @@ public class ConsoleInputProvider(
             {
                 return parser(input);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 logger.WriteError($"Invalid input: {ex.Message}. Please try again.");
+                attempts++;
             }
         }
+        
+        logger.WriteError("Maximum retries reached.");
+        throw new Exception("Maximum retries reached.");
     }
 }

@@ -2,24 +2,37 @@ using RoboticSpiders.Domain.Exceptions;
 
 namespace RoboticSpiders.Domain.Models;
 
-public class Spider(
-        Position startPosition,
-        IWall wall
-    ) : IMovable
+public class Spider : IMovable
 {
+    public Spider(Position startPosition, IWall wall)
+    {
+        _wall = wall;
+        Position = EnsureValidPosition(startPosition);
+    }
+    
+    private Position _position;
+
+    public Position Position
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _position;
+            }
+        }
+        private set => _position = value;
+    }
+
     private readonly Lock _lock = new();
-    public Position Position { get; private set; } = startPosition;
-    private readonly IWall _wall = !wall.IsValidPosition(startPosition.X, startPosition.Y) ? throw new WallCollisionException("Spider cannot start outside the wall.") : wall;
+    private readonly IWall _wall;
 
     public void MoveForward()
     {
         lock (_lock)
         {
             var nextPos = Position.MoveForward();
-            if (_wall.IsValidPosition(nextPos.X, nextPos.Y))
-            {
-                Position = nextPos;
-            }
+            Position = EnsureValidPosition(nextPos);
         }
     }
 
@@ -37,5 +50,14 @@ public class Spider(
         {
             Position = Position.TurnRight();
         }
+    }
+    
+    private Position EnsureValidPosition( Position position)
+    {
+        if(!_wall.IsValidPosition(position.X, position.Y))
+        {
+            throw new WallCollisionException("Spider cannot move to a position outside the wall.");
+        }
+        return position;
     }
 }

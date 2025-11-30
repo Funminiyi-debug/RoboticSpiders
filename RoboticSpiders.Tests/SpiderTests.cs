@@ -1,5 +1,6 @@
 using RoboticSpiders.Domain.Models;
 using RoboticSpiders.Application.Services;
+using RoboticSpiders.Domain.Exceptions;
 using RoboticSpiders.Infrastructure.Services;
 
 namespace RoboticSpiders.Tests;
@@ -34,9 +35,6 @@ public class SpiderTests
         Position startPos = new Position(0, 0, Orientation.Down); // Facing edge
         IMovable spider = new Spider(startPos, wall);
 
-        spider.MoveForward();
-
-        Assert.Equal(0, spider.Position.X);
-        Assert.Equal(0, spider.Position.Y); // Should not move
+        Assert.Throws<WallCollisionException>(() => spider.MoveForward());
     }
 }
